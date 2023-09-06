@@ -88,6 +88,7 @@ if(_cv.mainScript==_lv.mainScript&&!dev){
 }
 
 var version = _cv;
+var latestVersion = _lv;
 
 //running main script
 eval(mainScript)//u can find main script in github repo

@@ -12,6 +12,9 @@ if(!version){
       htmScript:"0.0"
   }
 }
+if(!latestVersion){
+  var latestVersion = version
+}
 
 //calendar
 function tin(n){
@@ -131,8 +134,54 @@ async function imageLD(name){
   }
 }
 
-//code
-async function main(){
+//other
+async function loadHtml(){
+  var file
+  if(!dev&&latestVersion.html==version.html){
+    file = dirLD("main.html")
+    if(file)
+      return file;
+  }
+  file = await netLD("main.html")
+
+  dirSV("main.html",file)
+
+  version.html = latestVersion.html
+  dirSV("version.json",JSON.stringify(version))
+  
+  return file
+}
+
+async function loadScript(){
+  var file
+  if(!dev&&latestVersion.htmScript==version.htmScript){
+    file = dirLD("webview.js")
+    if(file)
+      return file;
+  }
+  file = await netLD("webview.js")
+
+  dirSV("webview.js",file)
+
+  version.htmScript = latestVersion.htmScript
+  dirSV("version.json",JSON.stringify(version))
+
+  return file
+}
+
+async function makeWebView(){
+  var wv = new WebView();
+
+  await wv.loadHTML(await loadHtml())
+  
+  wv.evaluateJavaScript(await loadScript())
+
+  wv.present(true)
+  
+  
+}
+
+async function makeWidget(){
   var ev = await nextEvent()
 
   var bgc = new Color("1C1C1E")
@@ -148,11 +197,18 @@ async function main(){
     var t2 = w.addText(ev.form)
   }
 
-  w.presentSmall()
-
-
+  //w.presentSmall()
+  
   Script.setWidget(w)
   Script.complete()
+}
+
+//code
+async function main(){
+  if(config.runsInWidget)
+    makeWidget()
+  else
+    makeWebView()
 }
 
 main();
