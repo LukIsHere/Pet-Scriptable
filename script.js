@@ -5,14 +5,16 @@ var settings = {
     offline:false
 }
 
-var dev = true
+//source code : https://github.com/LukIsHere/Pet-Scriptable
+
+var dev = false
 
 //location of files
 var dist
 if(dev)
     dist = "http://192.168.1.6:5500"//my pc local ip
 else
-    dist = ""
+    dist = "https://raw.githubusercontent.com/LukIsHere/Pet-Scriptable/main"
 
 //helper
 // add _ to not get conflict with main script
@@ -77,6 +79,8 @@ if(_cv.mainScript==_lv.mainScript&&!dev){
     mainScript = _dirLD("main.js")
 }else{
     mainScript = await _netLD("main.js")
+    
+    _dirSV("main.js",mainScript)
     
     _cv.mainScript = _lv.mainScript
 
