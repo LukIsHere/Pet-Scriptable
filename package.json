@@ -1,12 +1,14 @@
 {
     "name": "scriptable",
     "version": "1.0.0",
+    "type": "module",
     "eslintConfig": {
-      "extends": "@scriptable-ios"
+        "extends": "@scriptable-ios"
     },
     "devDependencies": {
-      "@scriptable-ios/eslint-config": "latest",
-      "@types/scriptable-ios": "latest",
-      "eslint": "latest"
+        "@scriptable-ios/eslint-config": "latest",
+        "@types/scriptable-ios": "latest",
+        "eslint": "latest",
+        "webpack-cli": "^5.1.4"
     }
-  }
+}
