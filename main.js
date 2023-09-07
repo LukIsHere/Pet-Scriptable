@@ -138,12 +138,16 @@ async function loadHtml(latestVersion,version){
   
   async function makeWebView(latestVersion,version){
     var wv = new WebView();
-  
-    await wv.loadHTML(await loadHtml(latestVersion,version));
+    
+    var html = await loadHtml(latestVersion,version);
+    console.log(html);
+    await wv.loadHTML(html);
     
     wv.present(true);
-    
-    await wv.evaluateJavaScript(await loadScript(latestVersion,version),true);
+
+    var script = await loadScript(latestVersion,version);
+    console.log(script);
+    await wv.evaluateJavaScript(script,true);
   
     console.log("INIT WATCHER");
     watcher(wv);
@@ -225,23 +229,16 @@ async function makeWidget(){
     Script.complete();
   }
 
-if(!version){
-  var version = {
-      mainScript:"0.0",
-      html:"0.0",
-      htmScript:"0.0"
-  };
-}
-if(!latestVersion){
-  var latestVersion = version;
-}
-
 //code
 async function main(){
-  if(config.runsInWidget)
-    makeWidget();
-  else
-    makeWebView(latestVersion,version);
+  try{
+    if(config.runsInWidget)
+      makeWidget();
+    else
+      makeWebView(latestVersion,version);
+  }catch(e){
+    console.error(e);
+  }
 }
 
 main();

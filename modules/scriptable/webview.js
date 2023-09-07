@@ -37,12 +37,16 @@ export async function loadHtml(latestVersion,version){
   
   export async function makeWebView(latestVersion,version){
     var wv = new WebView();
-  
-    await wv.loadHTML(await loadHtml(latestVersion,version))
+    
+    var html = await loadHtml(latestVersion,version)
+    console.log(html)
+    await wv.loadHTML(html)
     
     wv.present(true)
-    
-    await wv.evaluateJavaScript(await loadScript(latestVersion,version),true)
+
+    var script = await loadScript(latestVersion,version)
+    console.log(script)
+    await wv.evaluateJavaScript(script,true)
   
     console.log("INIT WATCHER")
     watcher(wv);
