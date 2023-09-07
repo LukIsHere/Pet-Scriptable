@@ -25,8 +25,10 @@ export function dirLD(file) {
 export function dirSV(file, data) {
     var path = fm.joinPath(localPath, file)
 
+    //console.log("SV "+data);
+
     fm.writeString(path, data)
-    console.log("SAVED " + file)
+    console.log("SAVED "+file)
 }
 
 export async function imageLD(name) {
@@ -65,4 +67,19 @@ export async function b64ImageLD(name) {
         return;
 
     return i2b64(img)
+}
+
+export async function cacheLD(name,reffresh=false){
+    var file
+
+    if(!reffresh){
+      file = dirLD("webview.js")
+      if(file)
+        return file;
+    }
+    file = await netLD(name)
+  
+    dirSV(name,file)
+  
+    return file
 }

@@ -27,8 +27,10 @@ function dirLD(file) {
 function dirSV(file, data) {
     var path = fm.joinPath(localPath, file);
 
+    //console.log("SV "+data);
+
     fm.writeString(path, data);
-    console.log("SAVED " + file);
+    console.log("SAVED "+file);
 }
 
 async function imageLD(name) {
@@ -69,6 +71,21 @@ async function b64ImageLD(name) {
     return i2b64(img)
 }
 
+async function cacheLD(name,reffresh=false){
+    var file;
+
+    if(!reffresh){
+      file = dirLD("webview.js");
+      if(file)
+        return file;
+    }
+    file = await netLD(name);
+  
+    dirSV(name,file);
+  
+    return file
+}
+
 var onData = (data)=>{console.log(data);};
 function watcher(wv,data=undefined) {
   wv.evaluateJavaScript("onData('"+data+"')", true).then(async(res) => {
@@ -102,51 +119,21 @@ function watcher(wv,data=undefined) {
   }).catch(onData);
 }
 
-async function loadHtml(latestVersion,version){
-    var file;
-    if(!dev&&latestVersion.html==version.html){
-      file = dirLD("main.html");
-      if(file)
-        return file;
-    }
-    file = await netLD("main.html");
-  
-    dirSV("main.html",file);
-  
-    version.html = latestVersion.html;
-    dirSV("version.json",JSON.stringify(version));
-    
-    return file
-  }
-  
-  async function loadScript(latestVersion,version){
-    var file;
-    if(!dev&&latestVersion.htmScript==version.htmScript){
-      file = dirLD("webview.js");
-      if(file)
-        return file;
-    }
-    file = await netLD("webview.js");
-  
-    dirSV("webview.js",file);
-  
-    version.htmScript = latestVersion.htmScript;
-    dirSV("version.json",JSON.stringify(version));
-  
-    return file
-  }
-  
-  async function makeWebView(latestVersion,version){
+async function makeWebView(){
+    console.log(latestVersion);
+    console.log(version);
+
     var wv = new WebView();
     
-    var html = await loadHtml(latestVersion,version);
-    console.log(html);
+    var html = await cacheLD("main.html",version.html!=latestVersion.html);
+    var script = await cacheLD("webview.js",version.htmScript!=latestVersion.htmScript);
+
+    dirSV("version.json",JSON.stringify(latestVersion));
+
     await wv.loadHTML(html);
     
     wv.present(true);
 
-    var script = await loadScript(latestVersion,version);
-    console.log(script);
     await wv.evaluateJavaScript(script,true);
   
     console.log("INIT WATCHER");
