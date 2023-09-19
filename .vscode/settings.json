@@ -2,9 +2,9 @@
     "emeraldwalk.runonsave": {
         "commands": [
             {
-                "match": ".js",
+                "match": ".*s",
                 "cmd": "rollup -c"
-            },
+            }
         ]
     }
 }

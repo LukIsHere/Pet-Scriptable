@@ -72,11 +72,12 @@ export async function b64ImageLD(name) {
 export async function cacheLD(name,reffresh=false){
     var file
 
-    if(!reffresh){
-      file = dirLD("webview.js")
+    if(!(reffresh||dev)){
+      file = dirLD(name)
       if(file)
         return file;
     }
+
     file = await netLD(name)
   
     dirSV(name,file)
