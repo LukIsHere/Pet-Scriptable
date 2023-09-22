@@ -1,10 +1,8 @@
-import { dump, saveData } from "./db";
-import { ctx } from "./screen";
+import { saveData } from "./db.js"
+import { initPet } from "../pet/main.js"
 
 if(!save){
     var save = {}
 }
 
-setInterval(()=>{
-    saveData(save)
-},1000)
+initPet("screen",save,saveData)

@@ -1,3 +1,5 @@
+import typescript from '@rollup/plugin-typescript';
+
 export default [
   {
     input: "modules/webview/main.js",
@@ -5,6 +7,15 @@ export default [
       file: "webview.js",
       format: "cjs",
     },
+    plugins: [typescript()]
+  },
+  {
+    input: "modules/demo/main.js",
+    output: {
+      file: "html.js",
+      format: "cjs",
+    },
+    plugins: [typescript()]
   },
   {
     input: "modules/scriptable/main.js",
@@ -13,4 +24,5 @@ export default [
       format: "cjs",
     },
   },
+  
 ];
